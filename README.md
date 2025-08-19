@@ -1,4 +1,4 @@
-# 🎛️ BSPM Noise Synthesis with WGAN-GP
+# BSPM Noise Synthesis with WGAN-GP
 
 This repository focuses on the generation of synthetic Body Surface Potential Mapping (BSPM) noise signals using a Wasserstein Generative Adversarial Network with Gradient Penalty (WGAN-GP). The project is structured to guide you through the process from raw signal processing to advanced AI-driven synthesis.
 
