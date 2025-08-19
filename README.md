@@ -16,7 +16,7 @@ This directory contains all the MATLAB and Python scripts organized by their spe
 * #### `1_noise_extraction/` 
     This subfolder contains the code responsible for extracting noise components from raw BSPM signals. This initial step is crucial for isolating the target noise characteristics for subsequent processing. 
 
-    The complete cardiac activity (PQRST) was eliminated thanks to the implementation of the canceller, which is avaiable on the `canceller`subfolder. All necessary functions are included in the `functions` subfolder. 
+    The complete cardiac activity (PQRST) was eliminated thanks to the implementation of the canceller, which is avaiable on the `canceller` subfolder. All necessary functions are included in the `functions` subfolder. 
 
 * #### `2_noise_transformation/` 
     Once noise signals are extracted, the code in this directory transforms them into **Laplace-Beltrami (LB) coefficients**. This transformation provides a more meaningful representation of the signals, keeping their spatial-coherence, which is essential for noise characterization. 
