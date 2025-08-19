@@ -1,6 +1,6 @@
 # 🎛️ BSPM Noise Synthesis with WGAN-GP
 
-This repository focuses on the generation of synthetic BSPM noise signals using a Wasserstein Generative Adversarial Network with Gradient Penalty (WGAN-GP). The project is structured to guide you through the process from raw signal processing to advanced AI-driven synthesis.
+This repository focuses on the generation of synthetic Body Surface Potential Mapping (BSPM) noise signals using a Wasserstein Generative Adversarial Network with Gradient Penalty (WGAN-GP). The project is structured to guide you through the process from raw signal processing to advanced AI-driven synthesis.
 
 ## 🚀 Project Overview
 
@@ -28,6 +28,8 @@ This directory contains all the MATLAB and Python scripts organized by their spe
 
     A `main` Python script is provided with the complete workflow of this implementation. All necessary functions and dependencies are included in the `functions` and `utils` subfolder. 
 
+    A `validation` Python script that includes the whole process in which the obtained images are reconverted into temporal noise signals and can be also represented using visualization functions available in the `functions` subfolder. 
+
     In the ``environment.yml`` file, the environment used for the training of the generative model is proposed for easier Anaconda configuration. 
 
 
@@ -40,13 +42,13 @@ This directory is where all the necessary data for the project must reside.
 
 To run the code, please note the following:
 
-* **Directory Paths**: You will need to modify directory paths within the scripts to match your local file system. Look for variables like `dir_dataset`, `dir_functions`, `model_path`, etc.
+* **Directory Paths**: You will need to modify directory paths within the scripts to match your local file system. Look for variables like `DATA_DIR`, `dir_functions`, `model_path`, etc, which are usually at the beggining of the script.
 * **Data Availability**:
-    * If you intend to use the `1_noise_extraction` and `2_noise_transformation` codes, you **must first place a BSPM dataset** into the `data/` folder. These initial steps are dependent on having the raw BSPM signals available.
+    * If you intend to use the `1_noise_extraction` and `2_noise_transformation` codes, you **must first place a BSPM noise dataset** into the `data/` folder. These initial steps are dependent on having the raw BSPM signals available.
     * If you intend to use the `3_ai_implementation` folder to  **train the WGAN-GP model**, you **must first place a Laplace-Beltrami coefficients dataset** into the `data/` folder. These initial steps are dependent on having the Laplace-Beltrami coefficients signals available.
-    * If you would like to use the same datasets that were used for the project, these will be available on NextCloud. 
+    * If you intent to execute the validation script `validation.py` (available in `3_ai_implementation`), keep in mind that due to privacy policies, the trained generator cannot be publicly shared, so you must first execute the `main.py` script to obtain a trained generator. 
 
 
 
 ---
-Made by Sabrina Strazzeri (sstrmui@itaca.upv.es).
+Made by Sabrina Strazzeri.
