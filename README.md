@@ -1,4 +1,4 @@
-# BSPM Noise Synthesis with WGAN-GP
+# EDEN: Electrocardiographic Deep Emulator of Noise
 
 This repository focuses on the generation of synthetic BSPM noise signals using a Wasserstein Generative Adversarial Network with Gradient Penalty (WGAN-GP). The project is structured to guide you through the process from the model training to the validation of the generated samples.
 
@@ -21,7 +21,7 @@ In the ``environment.yml`` file, the environment used for the training of the ge
 
 
 ### `data/`
-This directory is where all the necessary data for the project must reside. 
+This directory is where all the necessary data for the project must reside. However, due to privacy policies, sensible data from patietns cannot be publicly shared, so you must add your own files to this folder.
 
 
 ## 🏁 Getting Started
