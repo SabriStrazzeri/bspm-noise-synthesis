@@ -19,10 +19,15 @@ The pipeline includes:
     and a learning rate scheduler.
 """
 
-#%% ---- Libraries and Environment Setup ----
+# %% ---- Libraries and Environment Setup ----
 # Import necessary libraries for TensorFlow, numerical operations,
 # file system interactions, plotting, and signal processing.
 
+from preprocessing import *
+from visualization import *
+from load_data import load_data
+from training import *
+import matlab.engine
 import tensorflow as tf
 import numpy as np
 from tensorflow.keras.optimizers import Adam
@@ -31,7 +36,6 @@ import sys
 
 # Don't forget to change directory to the MATLAB engine path to ensure it can be imported.
 os.chdir(r'C:\Users\ITACA_2025_1\anaconda3\Lib\site-packages\matlabengine-24.2-py3.12.egg')
-import matlab.engine
 
 # Define directories
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -39,14 +43,10 @@ FUNCTIONS_DIR = os.path.join(BASE_DIR, 'functions')
 
 # Load customized functions
 sys.path.append(FUNCTIONS_DIR)
-from training import *
-from load_data import load_data
-from visualization import *
-from preprocessing import *
 
 
-#%% ---- Load dataset ----
-# Load the dataset using a custom function. The function returns LB 
+# %% ---- Load dataset ----
+# Load the dataset using a custom function. The function returns LB
 # coefficients, noise, and lead status information.
 
 # Define seed for reproducibility
@@ -62,7 +62,7 @@ coeffs, noise, _, leadStatus, _ = load_data(dataset_path)
 # Determine preprocessing technique based on the decimation flag
 decimate = 1
 
-if decimate: 
+if decimate:
     data = decimate_data(coeffs, seed)
     noise_2 = decimate_data(noise, seed)
 else:
@@ -72,17 +72,17 @@ else:
 data = np.expand_dims(data, axis=-1)
 
 
-#%% ---- Hyperparameters ----
+# %% ---- Hyperparameters ----
 
 # Number of epochs for training
-EPOCHS = 2500 
+EPOCHS = 2500
 
 # Batch size for training
 BATCH_SIZE = 32
 
 # Calculate the number of steps per epoch
 steps_per_epoch = len(coeffs) // BATCH_SIZE
-if steps_per_epoch == 0 and coeffs.shape[0] > 0 :
+if steps_per_epoch == 0 and coeffs.shape[0] > 0:
     steps_per_epoch = 1
 
 # Optimizers for the generator and discriminator
@@ -92,12 +92,12 @@ optimizer_d = Adam(learning_rate=1e-4, beta_1=0.5, clipvalue=1.0)
 # Dfine the type of GAN to be used ('wgan')
 TYPE_GAN = 'wgan'
 
-# Define input data and latent noise vector dimensions 
+# Define input data and latent noise vector dimensions
 ROWS, COLS = 128,  2500
-NOISE_DIM = 128 
+NOISE_DIM = 128
 
 
-#%% ---- Training ----
+# %% ---- Training ----
 
 tf.keras.backend.clear_session()
 
@@ -106,11 +106,10 @@ sample_interval = 10
 # Train the model
 avg_disc_real_losses, avg_disc_fake_losses, avg_gen_losses, avg_gp_losses = train_wgan(
     data, TYPE_GAN, ROWS, COLS, NOISE_DIM,
-    EPOCHS, BATCH_SIZE, steps_per_epoch, len(data), optimizer_d, optimizer_g, 
+    EPOCHS, BATCH_SIZE, steps_per_epoch, len(data), optimizer_d, optimizer_g,
     BASE_DIR,
-    sample_interval=sample_interval, 
-    n_critic = 5, lambda_gp = 5,
-    start_epoch = 0, 
-    scheduler = 1
+    sample_interval=sample_interval,
+    n_critic=5, lambda_gp=5,
+    start_epoch=0,
+    scheduler=1
 )
-    

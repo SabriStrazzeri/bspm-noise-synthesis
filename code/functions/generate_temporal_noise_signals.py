@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def generate_temporal_noise_signals(model, Psi_lb, noise_dim, selected_case=1, seed=42, N=30):
     """
     Generates synthetic temporal noise signals and their corresponding
@@ -35,7 +36,8 @@ def generate_temporal_noise_signals(model, Psi_lb, noise_dim, selected_case=1, s
     # Generate random latent vectors from a standard normal distribution
     # These vectors serve as input to the generator
     np.random.seed(seed)
-    random_latent_vectors = np.random.normal(0, 1, (N, noise_dim)) # Ruido en distribución normal
+    random_latent_vectors = np.random.normal(
+        0, 1, (N, noise_dim))  # Ruido en distribución normal
 
     # Use the generator model to create synthetic coefficient samples from the latent vectors
     # `training=False` ensures that batch normalization layers (if any) use their
@@ -44,7 +46,7 @@ def generate_temporal_noise_signals(model, Psi_lb, noise_dim, selected_case=1, s
 
     # Extract the specific generated sample indicated by `selected_case`
     # The shape changes from (N, 128, 2500, 1) to (128, 2500, 1
-    generated_samples = np.array(generated_samples[selected_case]) 
+    generated_samples = np.array(generated_samples[selected_case])
 
     # Remove the singleton dimension (e.g., (128, 2500, 1) becomes (128, 2500))
     # for easier matrix multiplication and plotting
@@ -55,8 +57,7 @@ def generate_temporal_noise_signals(model, Psi_lb, noise_dim, selected_case=1, s
     generated_sample_desnorm = (generated_sample - 0.5) * 2
 
     # Convert the denormalized coefficient sample into a temporal noise signal
-    # using the provided conversion matrix (Psi_lb)   
+    # using the provided conversion matrix (Psi_lb)
     generated_noise = Psi_lb @ generated_sample_desnorm
-
 
     return generated_noise, generated_sample

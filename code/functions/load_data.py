@@ -4,7 +4,8 @@ import time
 # Don't forget to change directory to the MATLAB engine path to ensure it can be imported.
 import matlab.engine
 
-def load_data(dataset_path): 
+
+def load_data(dataset_path):
     """
     Loads BSPM noise signals data from .mat files within a specified directory
     using a MATLAB engine.
@@ -51,6 +52,5 @@ def load_data(dataset_path):
             coeffs_lb.append(np.array(mat['signal']['coeffs_lb']))
 
     print("Data loaded in %s seconds" % (time.time() - start_time))
-    
-    
+
     return coeffs_lb, noise, ecg, lead_status, torso

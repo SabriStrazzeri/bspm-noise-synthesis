@@ -3,7 +3,7 @@ This script implements a validation pipeline for a Wasserstein Generative Advers
 with Gradient Penalty (GP) for generating synthetic noise BSPM signals.
 """
 
-#%% ---- Libraries and Environment Setup ----
+# %% ---- Libraries and Environment Setup ----
 
 import numpy as np
 import os
@@ -19,7 +19,7 @@ DATA_DIR = os.path.join(SCRIPT_DIR, 'utils')
 
 
 # %% ---- Load the generator model ----
-# NOTE: due to privacy policies, the trained generator cannot be shared publicly. 
+# NOTE: due to privacy policies, the trained generator cannot be shared publicly.
 
 model_path = os.path.join(MODELS_DIR, 'generator.h5')
 if not os.path.exists(model_path):
@@ -53,4 +53,3 @@ signal = Psi_lb @ np.squeeze(samples_dn)
 
 # Visualize the obtained signal
 plot_temporal_signal(signal, idx, SCRIPT_DIR, save_mode=0)
-

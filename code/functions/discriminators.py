@@ -2,6 +2,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Flatten, LeakyReLU, Dropout, Conv2D
 import tensorflow as tf
 
+
 def disc_model_critic(rows, cols):
     """
     Constructs a discriminator (critic) model for a Wasserstein Generative Adversarial Network 
@@ -24,31 +25,30 @@ def disc_model_critic(rows, cols):
     model = Sequential()
 
     # First convolutional block: Downsamples and extracts features
-    model.add(Conv2D(8, kernel_size=5, strides=2, input_shape=(rows, cols, 1), padding="same"))
-    model.add(LeakyReLU(alpha=0.2)) # Non-linear activation for GANs
+    model.add(Conv2D(8, kernel_size=5, strides=2,
+              input_shape=(rows, cols, 1), padding="same"))
+    model.add(LeakyReLU(alpha=0.2))  # Non-linear activation for GANs
     model.add(Dropout(0.3))  # Regularization to prevent overfitting
 
     # Second convolutional block: Further downsamples and extracts features
     model.add(Conv2D(16, kernel_size=5, strides=2, padding="same"))
-    model.add(LeakyReLU(alpha=0.2)) # Non-linear activation for GANs
-    model.add(Dropout(0.3)) # Regularization to prevent overfitting
+    model.add(LeakyReLU(alpha=0.2))  # Non-linear activation for GANs
+    model.add(Dropout(0.3))  # Regularization to prevent overfitting
 
     # Flatten the output from the convolutional layers to feed into a Dense layer
     model.add(Flatten())
-    
+
     # Final Dense layer: Outputs a single scalar value. No activation is used
     # because for a WGAN critic, this output represents a raw "score" or "criticism"
     # rather than a probability
-    model.add(Dense(1)) # No activation function for critic output
+    model.add(Dense(1))  # No activation function for critic output
 
     # Prints a summary of the model's architecture, including layer types,
     # output shapes, and number of parameters
     print(f"######### Critic (discriminator) Summary #########")
     model.summary()
-    
 
     return model
-
 
 
 def gradient_penalty(critic, real_imgs, fake_imgs, lambda_gp):
@@ -73,14 +73,15 @@ def gradient_penalty(critic, real_imgs, fake_imgs, lambda_gp):
     # Alpha is sampled from a uniform distribution between 0 and 1
     alpha = tf.random.uniform(
         [tf.shape(real_imgs)[0], 1, 1, 1], 0., 1.,
-        dtype=tf.float32 # Explicitly float32
+        dtype=tf.float32  # Explicitly float32
     )
-    
+
     # Calculate (1 - alpha), explicitly ensuring it's float32
     one_minus_alpha = tf.cast(1.0 - alpha, tf.float32)
 
     # Create interpolated samples by linearly combining real and fake images
-    interpolated_imgs = real_imgs * alpha + fake_imgs * one_minus_alpha # Using explicit one_minus_alpha
+    interpolated_imgs = real_imgs * alpha + fake_imgs * \
+        one_minus_alpha  # Using explicit one_minus_alpha
 
     # Use a GradientTape to compute gradients of the critic's output
     # with respect to the interpolated samples
@@ -97,6 +98,5 @@ def gradient_penalty(critic, real_imgs, fake_imgs, lambda_gp):
     # Calculate the gradient penalty term: (norm - 1.0)^2
     # This penalizes deviations of the gradient norm from 1
     gp = tf.reduce_mean((norm - 1.0)**2)
-    
 
     return gp * lambda_gp

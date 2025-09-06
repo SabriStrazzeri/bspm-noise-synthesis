@@ -1,6 +1,7 @@
 import numpy as np
 
-def split_data(coeffs, seed=42): 
+
+def split_data(coeffs, seed=42):
     """
     Splits input coefficient matrices into smaller batches, discards
     zero-padded entries, and normalizes the data.
@@ -24,11 +25,10 @@ def split_data(coeffs, seed=42):
     # Split data into smaller batches (e.g., 128x10000 --> 128x2500)
     coeffs2 = []
 
-    for mat in np.array(coeffs): 
+    for mat in np.array(coeffs):
         split_matrices = np.array_split(mat, 4, axis=1)
-        coeffs2.extend(split_matrices)  
+        coeffs2.extend(split_matrices)
     coeffs2 = np.array(coeffs2)
-
 
     # Discard cases with more than 5% zero-padding (represented as 0.5 after
     # an initial normalization, if applicable, or actual zeros) and normalize
@@ -36,11 +36,11 @@ def split_data(coeffs, seed=42):
     # This step helps to avoid training on predominantly empty data
     data = []
 
-    for mat in coeffs2: 
+    for mat in coeffs2:
         proportion_of_zeros = np.sum(mat == 0) / mat.size
         if proportion_of_zeros <= 0.05:
             # Normalize data to a [0, 1] range
-            mat = mat / np.max(abs(mat)) / 2 + 0.5 * np.ones(mat.shape) 
+            mat = mat / np.max(abs(mat)) / 2 + 0.5 * np.ones(mat.shape)
             data.append(mat)
     data = np.array(data)
 
@@ -48,7 +48,6 @@ def split_data(coeffs, seed=42):
     np.random.seed(seed)
     shuffled_indices = np.random.permutation(len(data))
     data = data[shuffled_indices]
-
 
     return data
 
@@ -82,20 +81,19 @@ def decimate_data(coeffs, seed=42):
     # This assumes zero-padding is indicated by zeros in the first row
     for mat in np.array(coeffs):
         first_row = mat[0, :]
-        
+
         # Search for the first and last non-zero indices in the first row
         nonzero_indices = np.where(first_row != 0)[0]
-        
+
         if nonzero_indices.size == 0:
             # If the matrix is entirely zero-padded, discard it
-            continue 
+            continue
 
         start_idx = nonzero_indices[0]
         end_idx = nonzero_indices[-1] + 1  # Include the last non-zero index
-        
+
         trimmed_mat = mat[:, start_idx:end_idx]
         trimmed_coeffs.append(trimmed_mat)
-
 
     # Decimation: downsample the trimmed matrices by a factor of 2
     coeffs2 = [m[:, ::2] for m in trimmed_coeffs]
@@ -103,12 +101,13 @@ def decimate_data(coeffs, seed=42):
     # Split into smaller samples (e.g., 128xN --> 128x2500) and normalize
     data = []
     for mat in coeffs2:
-        total_cols = mat.shape[1] # Total number of columns in the matrix
+        total_cols = mat.shape[1]  # Total number of columns in the matrix
         num_chunks = total_cols // 2500  # Number of 2500-column chunks
         for i in range(num_chunks):
-            chunk = mat[:, i*2500 : (i+1)*2500] # Extract a chunk of 2500 columns
+            # Extract a chunk of 2500 columns
+            chunk = mat[:, i*2500: (i+1)*2500]
             # Normalize data to a [0, 1] range
-            chunk = chunk / np.max(abs(chunk)) / 2 + 0.5 * np.ones(chunk.shape) 
+            chunk = chunk / np.max(abs(chunk)) / 2 + 0.5 * np.ones(chunk.shape)
             data.append(chunk)
 
     # Convert to a NumPy array and shuffle the dataset
@@ -116,6 +115,5 @@ def decimate_data(coeffs, seed=42):
     shuffled_indices = np.random.permutation(len(data))
     data = np.array(data)
     data = data[shuffled_indices]
-
 
     return data
