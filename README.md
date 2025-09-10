@@ -21,7 +21,7 @@ In the ``environment.yml`` file, the environment used for the training of the ge
 
 
 ### `data/`
-This directory is where all the necessary data for the project must reside. However, due to privacy policies, sensible data from patietns cannot be publicly shared, so you must add your own files to this folder.
+This directory is where all the necessary data for the project must reside. However, due to privacy policies, sensible data from patients cannot be publicly shared, so you must add your own files to this folder.
 
 
 ## 🏁 Getting Started
